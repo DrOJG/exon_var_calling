@@ -1,8 +1,17 @@
+#include: "workflow/rules/preprocess.smk"
 import pandas as pd
 
 configfile: "config/config.yaml"
 
 samples = pd.read_table(config["samples"]).set_index("id", drop=False)
+
+rule all:
+    input:
+        expand("results/trimmed_fastq/{id}_R1_001_trimmed.fastq.gz", id=samples["id"]),
+        expand("results/trimmed_fastq/{id}_R2_001_trimmed.fastq.gz", id=samples["id"]),
+        expand("results/logs/fastp/{id}_fastp.json", id=samples["id"]),
+        expand("results/logs/fastp/{id}_fastp.html", id=samples["id"])
+
 
 rule fastp_trim_and_filter:
     input:

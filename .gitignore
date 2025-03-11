@@ -172,6 +172,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
 # Datafiles
 data/
 resources/
+results/
+
+#Snakemake specific
+.snakemake
