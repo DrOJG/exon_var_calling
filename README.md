@@ -1,15 +1,15 @@
 # **Snakemake workflow for single gene exon variant calling**
 ## WIP
 This workflow will take the following inputs:  
-    - Folder of raw, paired fastq files (R1 and R2 for each sample).  
-    - Sample table with columns: [id, sample, exon].  
-    - Reference genome (We can make script check for and download this if needed).  
-    - config.yml file with general options plus links to ref and samp table.  
+    * Folder of raw, paired fastq files (R1 and R2 for each sample).  
+    * Sample table with columns: [id, sample, exon].  
+    * Reference genome (We can make script check for and download this if needed).  
+    * config.yml file with general options plus links to ref and samp table.  
 
 Final output will be:  
-    - Individual aligned BAM files for every sequenced sample.  
-    - Merged and filtered VCF files for every samples for all exons.  
-    - Plot of variants on gene map? Check if possible.  
+    * Individual aligned BAM files for every sequenced sample.  
+    * Merged and filtered VCF files for every samples for all exons.  
+    * Plot of variants on gene map? Check if possible.  
 
 Will follow same schema we have been using for exon analysis Bash scripts:  
     1. Trim and quality filter with fastp.  
