@@ -1,6 +1,7 @@
-name: fastp
+name: bwa
 channels:
 - bioconda
 - conda-forge
 dependencies:
-- fastp
+- bwa
+- samtools

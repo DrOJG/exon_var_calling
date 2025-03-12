@@ -1,4 +1,4 @@
-threads: 4
+threads: 2
 samples: "config/samples.tsv"
 reference: "resources/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
 outdir: "results"
