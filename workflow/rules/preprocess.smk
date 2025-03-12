@@ -39,7 +39,7 @@ rule bwa_align_and_sort:
         fq2_trim="results/trimmed_fastq/{id}_R2_001_trimmed.fastq.gz",
         ref=config["reference"]
     output:
-        "results/aligned_bams/{id}_sorted.sam"
+        "results/aligned_bams/{id}_sorted.bam"
 
     params:
         rg=r"@RG\tID:{id}\tSM:{id}"
@@ -49,8 +49,7 @@ rule bwa_align_and_sort:
     conda:
         "/home/oliver/Python_projects/snakemake_workflows/exon_var_calling/workflow/envs/bwa.yml"
     shell:
-        "bwa mem -t {threads} -R '{params.rg}' '{input.ref}' '{input.fq1_trim}' '{input.fq2_trim}' > {output}"
-       # """
-       # bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim}" "{input.fq2_trim}" |
-       #  samtools sort -@ {threads} -m 1G -o {output} -
-      #  """
+        """
+        bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim}" "{input.fq2_trim}" |
+        samtools sort -@ {threads} -m 1G -o {output} -
+        """
