@@ -18,7 +18,7 @@ rule fastp_trim_and_filter:
     threads: config["threads"]
     
     conda:
-        "/home/oliver/Python_projects/snakemake_workflows/exon_var_calling/workflow/envs/fastp.yml"
+        "workflow/envs/fastp.yml"
     
     shell:
         """
