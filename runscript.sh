@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 # Request 4 hrs of wallclock time (format hours:minutes:seconds).
 #$ -l h_rt=4:00:00
 
@@ -13,13 +13,13 @@
 #$ -pe smp 12
 
 ### Set Working Directory - CHANGE THIS EACH TIME! ###
-#$ -wd /home/sejjojg/Scratch/workspace/exon_smk_test/
+#$ -wd /home/sejjojg/Scratch/workspace/exon_var_calling/
 
 # Load modules
 
 . $MODULESHOME/init/bash
 
-module load python/miniconda3/4.10.3
+module load python/miniconda3/24.3.0-0
 
 source $UCL_CONDA_PATH/etc/profile.d/conda.sh
 
