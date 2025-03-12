@@ -51,5 +51,5 @@ rule bwa_align_and_sort:
     shell:
         """
         bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim}" "{input.fq2_trim}" |
-        samtools sort -@ {threads} -m 1G -o {output} -
+        samtools sort -@ {threads} -m 1G -o {output} - 
         """
