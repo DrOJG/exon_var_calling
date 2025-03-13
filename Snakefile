@@ -9,4 +9,6 @@ samples = pd.read_table(config["samples"]).set_index("id", drop=False)
 
 rule all:
     input:
-        expand("results/final_bams/{id}_sorted_bqsr.bam", id=samples["id"])
+        expand("results/final_bams/{sample}_{exon}_sorted_bqsr.bam",
+                sample=samples["sample"],
+                exon=samples["exon"])

@@ -2,14 +2,14 @@ configfile: "config/config.yaml"
 
 rule gatk_baserecalibrator:
     input:
-        bam="results/aligned_bams/{id}_sorted.bam",
+        bam="results/aligned_bams/{sample_name}_sorted.bam",
         ref=config["reference"],
         dict=config["refdict"],
         known=config["known"],  # optional known sites - single or a list
     output:
-        recal_table="results/recal/{id}.grp",
+        recal_table="results/recal/{sample_name}.grp",
     log:
-        "logs/gatk/baserecalibrator/{id}.log",
+        "results/logs/gatk/baserecalibrator/{sample_name}.log",
     params:
         extra="",  # optional
         java_opts="",  # optional
@@ -20,14 +20,14 @@ rule gatk_baserecalibrator:
 
 rule gatk_applybqsr:
     input:
-        bam="results/aligned_bams/{id}_sorted.bam",
+        bam="results/aligned_bams/{sample_name}_sorted.bam",
         ref=config["reference"],
         dict=config["refdict"],
-        recal_table="results/recal/{id}.grp",
+        recal_table="results/recal/{sample_name}.grp",
     output:
-        bam="results/final_bams/{id}_sorted_bqsr.bam",
+        bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
     log:
-        "logs/gatk/gatk_applybqsr/{id}.log",
+        "results/logs/gatk/gatk_applybqsr/{sample_name}.log",
     params:
         extra="--add-output-sam-program-record",  # optional
         java_opts="",  # optional
