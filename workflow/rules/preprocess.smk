@@ -18,7 +18,7 @@ rule fastp_trim_and_filter:
     threads: config["threads"]
     
     conda:
-        "workflow/envs/fastp.yml"
+        "ruleenvs/fastp.yml"
     
     shell:
         """
@@ -42,12 +42,12 @@ rule bwa_align_and_sort:
         "results/aligned_bams/{id}_sorted.bam"
 
     params:
-        rg=r"@RG\tID:{id}\tSM:{id}"
+        rg=r"@RG\tID:{id}\tSM:{id}\tPL:ILLUMINA"
 
     threads: config["threads"]
     
     conda:
-        "/home/oliver/Python_projects/snakemake_workflows/exon_var_calling/workflow/envs/bwa.yml"
+        "ruleenvs/bwa.yml"
     shell:
         """
         bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim}" "{input.fq2_trim}" |
