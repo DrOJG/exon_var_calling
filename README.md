@@ -2,8 +2,9 @@
 ## WIP
 This workflow will take the following inputs:  
 * Folder of raw, paired fastq files (R1 and R2 for each sample).  
-* Sample table with columns: [id, sample, exon].  
-* Reference genome (We can make script check for and download this if needed).  
+* Sample table with columns: [id, sample, exon, fq1, fq2].  
+* Reference genome (We can make script check for and download this if needed).
+* Additional resource files (genome.dict, known sites file)  
 * config.yml file with general options plus links to ref and samp table.  
 
 Final output will be:  
