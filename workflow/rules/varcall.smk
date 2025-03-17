@@ -24,13 +24,19 @@ rule deepvariant:
         ref=config["reference"],
     output:
         vcf="results/vcf/deepvariant/{sample_name}_deepvar.vcf.gz",
-    params:
-        model="wgs",   # {wgs, wes, pacbio, hybrid}
-        sample_name=lambda w: w.sample_name, # optional
-        extra="--regions 'chr17'"
     threads: config["threads"]
     log:
-        "results/logs/deepvariant/{sample_name}/stdout.log"
-    wrapper:
-        "v5.8.3/bio/deepvariant" #May need to set python version to 3.8.* for compatibility 
-    
+        directory("results/logs/deepvariant/{sample_name}/")
+    container:
+        "docker://google/deepvariant:1.8.0"
+    shell:
+        """
+        /opt/deepvariant/bin/run_deepvariant \
+	    --model_type=WGS \
+	    --ref={input.ref} \
+	    --reads={input.bam} \
+	    --regions "chr17" \
+	    --output_vcf={output.vcf} \
+	    --num_shards={threads} \
+        --logdir={log}
+        """

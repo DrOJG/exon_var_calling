@@ -11,8 +11,7 @@ rule bcftools_merge_haplotypecaller:
                         allow_missing=True),
         idx=expand("results/vcf/haplotypecaller/{sample}_{item.exon}_hapcaller.vcf.gz.tbi",
                         item=lookup(query="sample == '{sample}'", within=samples),
-                        allow_missing=True)
-    
+                        allow_missing=True),
     output:
         "results/vcf/merged/{sample}_hapcaller_merged.vcf.gz",
     log:
