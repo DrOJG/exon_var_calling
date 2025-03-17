@@ -30,7 +30,7 @@ conda init bash
 conda env create -f ./workflow/envs/snakemake.yml
 
 conda activate snakemake
+conda config --set channel_priority strict
 
 # Run
-
-snakemake --sdm conda
+snakemake --sdm conda apptainer --apptainer-args '-B ${TMPDIR}'
