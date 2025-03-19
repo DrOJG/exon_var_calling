@@ -14,5 +14,6 @@ rule all:
         expand("results/final_bams/{sample}_{exon}_sorted_bqsr.bam",
                 sample=samples["sample"],
                 exon=samples["exon"]),
-        expand("results/vcf/merged/{sample}_hapcaller_merged.vcf.gz",
-                sample=samples["sample"]),
+        expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",
+                sample=samples["sample"],
+                caller=["hapcaller", "freebayes"])

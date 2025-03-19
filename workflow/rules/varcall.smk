@@ -19,6 +19,27 @@ rule haplotype_caller:
     wrapper:
         "v5.8.3/bio/gatk/haplotypecaller"
 
+rule freebayes_bed:
+    input:
+        alns="results/final_bams/{sample_name}_sorted_bqsr.bam",
+        idxs="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
+        ref=config["reference"],
+        regions=config["regions"],
+    output:
+        vcf = "results/vcf/freebayes/{sample_name}_freebayes.vcf.gz",
+    log:
+        "results/logs/freebayes/{sample_name}.log",
+    params:
+    
+    threads: config["threads"]
+    resources:
+        mem_mb=1024,
+    wrapper:
+        "v5.9.0/bio/freebayes"
+
+
+
+
 # Waiting to see if deepvariant gets fixed
 # rule deepvariant:
 #     input:
