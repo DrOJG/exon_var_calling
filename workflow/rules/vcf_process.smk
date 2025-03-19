@@ -34,10 +34,10 @@ rule bcftools_merge_haplotypecaller:
 
 rule bcftools_merge_freebayes:
     input:
-        calls=expand("results/vcf/haplotypecaller/{sample}_{item.exon}_freebayes.vcf.gz",
+        calls=expand("results/vcf/freebayes/{sample}_{item.exon}_freebayes.vcf.gz",
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
-        idx=expand("results/vcf/haplotypecaller/{sample}_{item.exon}_freebayes.vcf.gz.tbi",
+        idx=expand("results/vcf/freebayes/{sample}_{item.exon}_freebayes.vcf.gz.tbi",
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
     output:
