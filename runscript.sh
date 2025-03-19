@@ -18,7 +18,7 @@
 # Load modules
 
 . $MODULESHOME/init/bash
-
+module load apptainer
 module load python/miniconda3/24.3.0-0
 
 source $UCL_CONDA_PATH/etc/profile.d/conda.sh
@@ -33,4 +33,4 @@ conda activate snakemake
 conda config --set channel_priority strict
 
 # Run
-snakemake --sdm conda apptainer --apptainer-args '-B ${TMPDIR}'
+snakemake --sdm conda

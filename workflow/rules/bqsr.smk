@@ -36,3 +36,16 @@ rule gatk_applybqsr:
         mem_mb=1024,
     wrapper:
         "v5.8.3/bio/gatk/applybqsr"
+
+rule samtools_index_final_bam:
+    input:
+        "results/final_bams/{sample_name}_sorted_bqsr.bam",
+    output:
+        "results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
+    log:
+        "results/logs/samtools_index_final_bam/{sample_name}.log",
+    params:
+        extra="",  # optional params string
+    threads: config["threads"]  # This value - 1 will be sent to -@
+    wrapper:
+        "v5.9.0/bio/samtools/index"

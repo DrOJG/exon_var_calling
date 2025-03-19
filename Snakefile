@@ -16,6 +16,3 @@ rule all:
                 exon=samples["exon"]),
         expand("results/vcf/merged/{sample}_hapcaller_merged.vcf.gz",
                 sample=samples["sample"]),
-        expand("results/vcf/deepvariant/{sample}_{exon}_deepvar.vcf.gz",
-                sample=samples["sample"],
-                exon=samples["exon"])

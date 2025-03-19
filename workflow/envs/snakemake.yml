@@ -8,4 +8,3 @@ dependencies:
 - snakemake-minimal=8.29
 - pandas
 - conda>=24.7
-- apptainer
