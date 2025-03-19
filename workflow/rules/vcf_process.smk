@@ -8,7 +8,7 @@ rule bcftools_index_freebayes:
     input:
         "results/vcf/freebayes/{sample_name}_freebayes.vcf.gz",
     output:
-        "results/vcf/freebayes/{sample_name}_freebayes.vcf.gz",
+        "results/vcf/freebayes/{sample_name}_freebayes.vcf.gz.tbi",
     log:
         "results/bcftools_index/{sample_name}.log",
     wrapper:
