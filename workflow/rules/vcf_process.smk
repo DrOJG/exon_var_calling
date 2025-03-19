@@ -52,14 +52,17 @@ rule bcftools_merge_freebayes:
 
 rule filter_merged_vcfs:
     input:
-        "results/vcf/merged/{sample}_{caller}_merged.vcf.gz",
+        vcf="results/vcf/merged/{sample}_{caller}_merged.vcf.gz",
+        index="results/vcf/merged/{sample}_{caller}_merged.vcf.gz.tbi",
+        regions=config["regions"],
     output:
-        "results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
+        vcf="results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
+        index="results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz.tbi"
     log:
         "results/log/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
     params:
         filter="-i 'FORMAT/DP>=10 && QUAL>=20'",
-        extra=f"-R {config["regions"]}, --write-index",
+        extra="--write-index",
     wrapper:
         "v5.9.0/bio/bcftools/filter"
 
