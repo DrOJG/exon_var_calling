@@ -15,7 +15,7 @@ rule haplotype_caller:
         extra="-L chr17 --max-reads-per-alignment-start 0 --create-output-variant-index",
     threads: config["threads"]
     resources:
-        mem_mb=1024,
+        mem_mb=8192,
     wrapper:
         "v5.8.3/bio/gatk/haplotypecaller"
 
@@ -33,7 +33,7 @@ rule freebayes_bed:
     
     threads: config["threads"]
     resources:
-        mem_mb=1024,
+        mem_mb=8192,
     wrapper:
         "v5.9.0/bio/freebayes"
 
