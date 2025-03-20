@@ -29,7 +29,7 @@ rule bcftools_merge_haplotypecaller:
         "results/logs/merge_hapcaller/{sample}_hapcaller_merged.log",
     params:
         uncompressed_bcf=False,
-        extra="--merge both --write-index",
+        extra="--merge both --write-index=tbi",
     wrapper:
         "v5.9.0/bio/bcftools/merge"
 
@@ -48,7 +48,7 @@ rule bcftools_merge_freebayes:
         "results/logs/merge_freebayes/{sample}_freebayes_merged.log",
     params:
         uncompressed_bcf=False,
-        extra="--merge both --write-index",
+        extra="--merge both --write-index=tbi",
     wrapper:
         "v5.9.0/bio/bcftools/merge"
 
@@ -64,7 +64,7 @@ rule filter_merged_vcfs:
         "results/log/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
     params:
         filter="-i 'FORMAT/DP>=10 && QUAL>=20'",
-        extra="--write-index",
+        extra="--write-index=tbi",
     wrapper:
         "v5.9.0/bio/bcftools/filter"
 
