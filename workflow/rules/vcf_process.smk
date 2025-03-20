@@ -59,14 +59,22 @@ rule filter_merged_vcfs:
         regions=config["regions"],
     output:
         vcf="results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
-        index="results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz.tbi"
     log:
         "results/log/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
     params:
         filter="-i 'FORMAT/DP>=10 && QUAL>=20'",
-        extra="--write-index=tbi",
     wrapper:
         "v5.9.0/bio/bcftools/filter"
+
+rule bcftools_index_filtered:
+    input:
+        "results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
+    output:
+        "results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz.tbi",
+    log:
+        "results/bcftools_index/{sample}_{caller}_merged_filtered.log",
+    wrapper:
+        "v5.9.0/bio/bcftools/index"
 
 rule snpeff_download:
     output:
@@ -95,3 +103,13 @@ rule snpeff:
         mem_mb=4096
     wrapper:
         "v5.9.0/bio/snpeff/annotate"
+
+rule bcftools_index_final_vcf:
+    input:
+        "results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",
+    output:
+        "results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz.tbi",
+    log:
+        "results/bcftools_index/{sample}_{caller}_merged_filtered_snpeff.log",
+    wrapper:
+        "v5.9.0/bio/bcftools/index"
