@@ -17,4 +17,7 @@ rule all:
         expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",
                 sample=samples["sample"],
                 caller=["hapcaller", "freebayes"]),
+        expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz.tbi",
+                sample=samples["sample"],
+                caller=["hapcaller", "freebayes"]),
         "results/multiqc/multiqc_final.html"

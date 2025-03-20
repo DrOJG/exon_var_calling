@@ -10,7 +10,7 @@ rule bcftools_index_freebayes:
     output:
         "results/vcf/freebayes/{sample_name}_freebayes.vcf.gz.tbi",
     log:
-        "results/bcftools_index/{sample_name}.log",
+        "results/logs/bcftools_index/{sample_name}.log",
     wrapper:
         "v5.9.0/bio/bcftools/index"
 
@@ -60,7 +60,7 @@ rule filter_merged_vcfs:
     output:
         vcf="results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
     log:
-        "results/log/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
+        "results/logs/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
     params:
         filter="-i 'FORMAT/DP>=10 && QUAL>=20'",
     wrapper:
@@ -72,7 +72,7 @@ rule bcftools_index_filtered:
     output:
         "results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz.tbi",
     log:
-        "results/bcftools_index/{sample}_{caller}_merged_filtered.log",
+        "results/logs/bcftools_index/{sample}_{caller}_merged_filtered.log",
     wrapper:
         "v5.9.0/bio/bcftools/index"
 
@@ -97,7 +97,7 @@ rule snpeff:
         stats="results/snpeff_stats/{sample}_{caller}_snpeff.html",  # summary statistics (in HTML), optional
         csvstats="results/snpeff_stats/{sample}_{caller}_snpeff.csv" # summary statistics in CSV, optional
     log:
-        "logs/snpeff/{sample}_{caller}.log"
+        "results/logs/snpeff/{sample}_{caller}.log"
     resources:
         java_opts=f"-XX:ParallelGCThreads={config["threads"]}",
         mem_mb=4096
@@ -110,6 +110,6 @@ rule bcftools_index_final_vcf:
     output:
         "results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz.tbi",
     log:
-        "results/bcftools_index/{sample}_{caller}_merged_filtered_snpeff.log",
+        "results/logs/bcftools_index/{sample}_{caller}_merged_filtered_snpeff.log",
     wrapper:
         "v5.9.0/bio/bcftools/index"
