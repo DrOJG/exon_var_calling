@@ -24,6 +24,7 @@ rule bcftools_merge_haplotypecaller:
                         allow_missing=True),
     output:
         "results/vcf/merged/{sample}_hapcaller_merged.vcf.gz",
+        "results/vcf/merged/{sample}_hapcaller_merged.vcf.gz.tbi",
     log:
         "results/logs/merge_hapcaller/{sample}_hapcaller_merged.log",
     params:
@@ -42,6 +43,7 @@ rule bcftools_merge_freebayes:
                         allow_missing=True),
     output:
         "results/vcf/merged/{sample}_freebayes_merged.vcf.gz",
+        "results/vcf/merged/{sample}_freebayes_merged.vcf.gz.tbi",
     log:
         "results/logs/merge_freebayes/{sample}_freebayes_merged.log",
     params:
