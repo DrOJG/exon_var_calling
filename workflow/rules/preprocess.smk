@@ -30,6 +30,7 @@ rule fastp_trim_and_filter:
         html="results/logs/fastp/{sample_name}_fastp.html"
     
     threads: config["threads"]
+    
     conda:
         "ruleenvs/fastp.yml"
     

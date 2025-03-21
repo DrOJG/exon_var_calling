@@ -16,16 +16,15 @@ rule samtools_flagstat:
 
 rule multiqc_all:
     input:
-        expand("results/logs/fastp/{sample_name}_fastp.json",
-                sample_name=samples["fq1"]),
-        expand("results/logs/fastp/{sample_name}_fastp.json",
-                sample_name=samples["fq2"]),
+        expand("results/logs/fastp/{sample}_{exon}_fastp.json",
+                sample=samples["sample"],
+                exon=samples["exon"]),
         expand("results/flagstat/{sample}_{exon}_sorted_bqsr.bam.flagstat",
                 sample=samples["sample"],
                 exon=samples["exon"]),
         expand("results/snpeff_stats/{sample}_{caller}_snpeff.csv",
                 sample=samples["sample"],
-                caller=["hapcaller", "freebayes"])
+                caller=["hapcaller", "freebayes"]),
     output:
         "results/multiqc/multiqc_final.html",
         directory("results/multiqc/multiqc_data"),
