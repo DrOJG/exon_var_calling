@@ -12,7 +12,8 @@ rule haplotype_caller:
     log:
         "results/logs/gatk/haplotypecaller/{sample_name}.log",
     params:
-        extra="-L chr17 --max-reads-per-alignment-start 0 --create-output-variant-index",
+        interval_bed = workflow.source_path(config["regions"])
+        extra="-L {params.interval_bed} --max-reads-per-alignment-start 0 --create-output-variant-index",
     threads: config["threads"]
     resources:
         mem_mb=8192,
