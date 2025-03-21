@@ -33,7 +33,8 @@ rule fastp_trim_and_filter:
     
     conda:
         "ruleenvs/fastp.yml"
-    
+    log:
+        "results/logs/fastp_logs/{sample_name}_fastp.log"
     shell:
         """
         fastp --thread {threads} -i {input.fq1} \
@@ -44,7 +45,7 @@ rule fastp_trim_and_filter:
         --adapter_sequence_r2=AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT \
         --json {output.json} \
         --html {output.html} \
-        --trim_poly_g
+        --trim_poly_g > {log} 2>&1
         """
 
 rule bwa_align_and_sort:
