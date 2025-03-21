@@ -24,8 +24,8 @@ rule fastp_trim_and_filter:
         fq2=lambda wildcards: "data/" + fq2_dict[wildcards.sample_name],
     
     output:
-        fq1_trim="results/trimmed_fastq/{sample_name}_R1_trimmed.fastq.gz",
-        fq2_trim="results/trimmed_fastq/{sample_name}_R2_trimmed.fastq.gz",
+        fq1_trim=temp("results/trimmed_fastq/{sample_name}_R1_trimmed.fastq.gz"),
+        fq2_trim=temp("results/trimmed_fastq/{sample_name}_R2_trimmed.fastq.gz"),
         json="results/logs/fastp/{sample_name}_fastp.json",
         html="results/logs/fastp/{sample_name}_fastp.html"
     
@@ -54,7 +54,7 @@ rule bwa_align_and_sort:
         fq2_trim="results/trimmed_fastq/{sample_name}_R2_trimmed.fastq.gz",
         ref=config["reference"]
     output:
-        "results/aligned_bams/{sample_name}_sorted.bam"
+        temp("results/aligned_bams/{sample_name}_sorted.bam")
 
     params:
         rg=r"@RG\tID:{sample_name}\tSM:{sample_name}\tPL:ILLUMINA"

@@ -23,8 +23,8 @@ rule bcftools_merge_haplotypecaller:
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
     output:
-        "results/vcf/merged/{sample}_hapcaller_merged.vcf.gz",
-        "results/vcf/merged/{sample}_hapcaller_merged.vcf.gz.tbi",
+        temp("results/vcf/merged/{sample}_hapcaller_merged.vcf.gz"),
+        temp("results/vcf/merged/{sample}_hapcaller_merged.vcf.gz.tbi"),
     log:
         "results/logs/merge_hapcaller/{sample}_hapcaller_merged.log",
     params:
@@ -42,8 +42,8 @@ rule bcftools_merge_freebayes:
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
     output:
-        "results/vcf/merged/{sample}_freebayes_merged.vcf.gz",
-        "results/vcf/merged/{sample}_freebayes_merged.vcf.gz.tbi",
+        temp("results/vcf/merged/{sample}_freebayes_merged.vcf.gz"),
+        temp("results/vcf/merged/{sample}_freebayes_merged.vcf.gz.tbi"),
     log:
         "results/logs/merge_freebayes/{sample}_freebayes_merged.log",
     params:
@@ -58,7 +58,7 @@ rule filter_merged_vcfs:
         index="results/vcf/merged/{sample}_{caller}_merged.vcf.gz.tbi",
         regions=config["regions"],
     output:
-        vcf="results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
+        vcf=temp("results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz"),
     log:
         "results/logs/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
     params:
@@ -70,7 +70,7 @@ rule bcftools_index_filtered:
     input:
         "results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz",
     output:
-        "results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz.tbi",
+        temp("results/vcf/filtered/{sample}_{caller}_merged_filtered.vcf.gz.tbi"),
     log:
         "results/logs/bcftools_index/{sample}_{caller}_merged_filtered.log",
     wrapper:
