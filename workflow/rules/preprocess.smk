@@ -2,7 +2,7 @@ import pandas as pd
 
 configfile: "config/config.yaml"
 
-samples = pd.read_table("config/samples.tsv").set_index("id", drop=False)
+samples = pd.read_table(config["samples"]).set_index("id", drop=False)
 
 def build_fastq_dicts(samples):
     """
