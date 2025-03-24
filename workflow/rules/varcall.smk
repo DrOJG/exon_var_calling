@@ -5,15 +5,15 @@ rule haplotype_caller:
         bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
         idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
         ref=config["reference"],
-        known=config["known"] # optional
+        known=config["known"],
+        interval=config["regions"], # optional
     output:
         vcf="results/vcf/haplotypecaller/{sample_name}_hapcaller.vcf.gz",
         idx="results/vcf/haplotypecaller/{sample_name}_hapcaller.vcf.gz.tbi"
     log:
         "results/logs/gatk/haplotypecaller/{sample_name}.log",
     params:
-        interval_bed = config["regions"],
-        extra="-L {params.interval_bed} --max-reads-per-alignment-start 0 --create-output-variant-index",
+        extra=lambda wildcards, input: f"-L {input.interval} --max-reads-per-alignment-start 0 --create-output-variant-index",
     threads: config["threads"]
     resources:
         mem_mb=8192,
