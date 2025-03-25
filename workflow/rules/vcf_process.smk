@@ -10,9 +10,35 @@ rule bcftools_index_freebayes:
     output:
         "results/vcf/freebayes/{sample_name}_freebayes.vcf.gz.tbi",
     log:
-        "results/logs/bcftools_index/{sample_name}.log",
+        "results/logs/bcftools_index/{sample_name}_freebayes.log",
     wrapper:
         "v5.9.0/bio/bcftools/index"
+
+rule bcftools_index_lofreq:
+    input:
+        "results/vcf/lofreq/{sample_name}_lofreq.vcf.gz",
+    output:
+        "results/vcf/lofreq/{sample_name}_lofreq.vcf.gz.tbi",
+    log:
+        "results/logs/bcftools_index/{sample_name}_lofreq.log",
+    wrapper:
+        "v5.9.0/bio/bcftools/index"
+
+rule gatk_filtermutectcalls:
+    input:
+        vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
+        ref=config["reference"],
+    output:
+        vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz"),
+        idx=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz.tbi"),
+    log:
+        "results/logs/gatk/filtermutect/{sample_names}_mutect_filter.log",
+    params:
+        extra="--max-alt-allele-count 4 --max-events-in-region 10 --create-output-variant-index",
+    resources:
+        mem_mb=4096,
+    wrapper:
+        "v5.9.0/bio/gatk/filtermutectcalls"
 
 rule bcftools_merge_haplotypecaller:
     input:
@@ -46,6 +72,44 @@ rule bcftools_merge_freebayes:
         temp("results/vcf/merged/{sample}_freebayes_merged.vcf.gz.tbi"),
     log:
         "results/logs/merge_freebayes/{sample}_freebayes_merged.log",
+    params:
+        uncompressed_bcf=False,
+        extra="--merge both --write-index=tbi",
+    wrapper:
+        "v5.9.0/bio/bcftools/merge"
+
+rule bcftools_merge_lofreq:
+    input:
+        calls=expand("results/vcf/lofreq/{sample}_{item.exon}_lofreq.vcf.gz",
+                        item=lookup(query="sample == '{sample}'", within=samples),
+                        allow_missing=True),
+        idx=expand("results/vcf/lofreq/{sample}_{item.exon}_lofreq.vcf.gz.tbi",
+                        item=lookup(query="sample == '{sample}'", within=samples),
+                        allow_missing=True),
+    output:
+        temp("results/vcf/merged/{sample}_lofreq_merged.vcf.gz"),
+        temp("results/vcf/merged/{sample}_lofreq_merged.vcf.gz.tbi"),
+    log:
+        "results/logs/merge_lofreq/{sample}_lofreq_merged.log",
+    params:
+        uncompressed_bcf=False,
+        extra="--merge both --write-index=tbi",
+    wrapper:
+        "v5.9.0/bio/bcftools/merge"
+
+rule bcftools_merge_mutect:
+    input:
+        calls=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter.vcf.gz",
+                        item=lookup(query="sample == '{sample}'", within=samples),
+                        allow_missing=True),
+        idx=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter.vcf.gz.tbi",
+                        item=lookup(query="sample == '{sample}'", within=samples),
+                        allow_missing=True),
+    output:
+        temp("results/vcf/merged/{sample}_mutect2_merged.vcf.gz"),
+        temp("results/vcf/merged/{sample}_mutect2_merged.vcf.gz.tbi"),
+    log:
+        "results/logs/merge_mutect/{sample}_mutect2_merged.log",
     params:
         uncompressed_bcf=False,
         extra="--merge both --write-index=tbi",

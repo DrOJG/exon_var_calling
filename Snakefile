@@ -16,8 +16,8 @@ rule all:
                 exon=samples["exon"]),
         expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",
                 sample=samples["sample"],
-                caller=["hapcaller", "freebayes"]),
+                caller=["hapcaller", "freebayes", "lofreq", "mutect2"]),
         expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz.tbi",
                 sample=samples["sample"],
-                caller=["hapcaller", "freebayes"]),
+                caller=["hapcaller", "freebayes", "lofreq", "mutect2"]),
         "results/multiqc/multiqc_final.html"

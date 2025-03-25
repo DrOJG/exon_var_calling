@@ -38,30 +38,37 @@ rule freebayes_bed:
     wrapper:
         "v5.9.0/bio/freebayes"
 
+rule lofreq:
+    input:
+        bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
+        bai="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
+        reference=config["reference"],
+        regions=config["regions"],
+    output:
+        "results/vcf/lofreq/{sample_name}_lofreq.vcf.gz",
+    log:
+        "results/logs/lofreq_call/{sample_name}_lofreq.log"
+    params:
+        ref=lambda wildcards, input: f"{input.reference}",
+        extra=lambda wildcards, input: f"-l {input.regions}",
+    threads: config["threads"]
+    wrapper:
+        "v5.9.0/bio/lofreq/call"
 
-
-
-# Waiting to see if deepvariant gets fixed
-# rule deepvariant:
-#     input:
-#         bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
-#         idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
-#         ref=config["reference"],
-#     output:
-#         vcf="results/vcf/deepvariant/{sample_name}_deepvar.vcf.gz",
-#     threads: config["threads"]
-#     log:
-#         directory("results/logs/deepvariant/{sample_name}/")
-#     container:
-#         "docker://google/deepvariant:1.8.0"
-#     shell:
-#         """
-#         /opt/deepvariant/bin/run_deepvariant \
-# 	    --model_type=WGS \
-# 	    --ref={input.ref} \
-# 	    --reads={input.bam} \
-# 	    --regions "chr17" \
-# 	    --output_vcf={output.vcf} \
-# 	    --num_shards={threads} \
-#         --logging_dir={log}
-#         """
+rule mutect2:
+    input:
+        fasta=config["reference"],
+        map="results/final_bams/{sample_name}_sorted_bqsr.bam",
+        interval=config["regions"],
+    output:
+        vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
+        idx="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz.tbi",
+    threads: config["threads"]
+    resources:
+        mem_mb=8192,
+    params:
+        extra=lambda wildcards, input: f"-L {input.interval} --max-reads-per-alignment-start 0 --create-output-variant-index",
+    log:
+        "results/logs/mutect2/{sample_name}_mutect2.log",
+    wrapper:
+        "v5.9.0/bio/gatk/mutect"
