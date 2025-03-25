@@ -1,4 +1,4 @@
-threads: 2
+threads: 8
 samples: "config/samples_TvT10.tsv"
 reference: "resources/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
 refdict: "resources/GCA_000001405.15_GRCh38_no_alt_analysis_set.dict"
