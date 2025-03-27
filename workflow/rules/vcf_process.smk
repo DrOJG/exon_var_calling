@@ -32,7 +32,7 @@ rule gatk_filtermutectcalls:
         vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz"),
         idx=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz.tbi"),
     log:
-        "results/logs/gatk/filtermutect/{sample_names}_mutect_filter.log",
+        "results/logs/gatk/filtermutect/{sample_name}_mutect_filter.log",
     params:
         extra="--max-alt-allele-count 4 --max-events-in-region 10 --create-output-variant-index",
     resources:
