@@ -126,7 +126,7 @@ rule filter_merged_vcfs:
     log:
         "results/logs/bcftools_filter/{sample}_{caller}_merged_filtered.vcf.gz.log",
     params:
-        filter="-i 'FORMAT/DP>=10 && QUAL>=20'",
+        filter="-i 'INFO/DP>=10 && QUAL>=20'",
     wrapper:
         "v5.9.0/bio/bcftools/filter"
 
