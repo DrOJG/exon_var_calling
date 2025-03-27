@@ -106,8 +106,9 @@ rule bcftools_merge_mutect:
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
     output:
-        temp("results/vcf/merged/{sample}_mutect2_merged.vcf.gz"),
-        temp("results/vcf/merged/{sample}_mutect2_merged.vcf.gz.tbi"),
+        # Merge mutect2 vcfs directly to filtered as already filtered
+        temp("results/vcf/filtered/{sample}_mutect2_merged_filtered.vcf.gz"),
+        temp("results/vcf/filtered/{sample}_mutect2_merged_filtered.vcf.gz.tbi"),
     log:
         "results/logs/merge_mutect/{sample}_mutect2_merged.log",
     params:
