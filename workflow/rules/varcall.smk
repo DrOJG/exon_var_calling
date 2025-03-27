@@ -59,6 +59,7 @@ rule mutect2:
     input:
         fasta=config["reference"],
         map="results/final_bams/{sample_name}_sorted_bqsr.bam",
+        idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
         interval=config["regions"],
     output:
         vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
