@@ -5,7 +5,7 @@ from pysam import VariantFile
 import pandas as pd
 
 testVCF = Path("/home/oliver/Documents/NGS_analysis/CD7_exon_results/results_TvT10-BM_20250328/vcf/final/TvT10-BM_mutect2_merged_filtered_snpeff.vcf.gz")
-
+#testVCF = Path("/home/oliver/Documents/NGS_analysis/CD7_exon_results/G944_freebayes_merged_filtered_snpeff.vcf.gz")
 outDF = pd.DataFrame(columns=["chromosome",
                               "position",
                               "ref",
@@ -26,21 +26,37 @@ with VariantFile(testVCF, "rb") as vcf:
             if adRecs:
                 adList.extend(adRecs)
             if afRecs:
+                # If multiple alleles, keep af as tuple, else convert to float
+                if len(rcrd.alts) == 1:
+                    afRecs = map(lambda x: float(x[0]), afRecs)
                 afList.extend(afRecs)
-        print(afList)
-        adSum = [sum(x) for x in zip(*adList)]
-        calcAF = adSum[1] / sum(adSum)
-        print(calcAF)
-        #print(adSum)
-        # rowDict = {"chromosome": rcrd.chrom,
-        #            "position": rcrd.pos,
-        #            "ref": rcrd.ref,
-        #            "alt": list(rcrd.alts),
-        #            "var_caller": "mutect2",
-        #            "reads_ref": rcrd.format["AD"][0],
-        #            "reads_alt": rcrd.format["AD"][1],
-        #            "freq_alt": rcrd.format["AF"],
-        #            "percent_alt": rcrd.format["AF"] * 100}
-        # outDF.loc[len(outDF)] = rowDict
 
-#print(outDF)
+        if len(adList) > 1:
+            sumAdList = list(map(sum, adList))
+            exonIdx = sumAdList.index(max(sumAdList))
+        else:
+            exonIdx = 0
+        
+        ADTuple = adList[exonIdx]
+        AF = afList[exonIdx]
+        
+        readsRef = ADTuple[0]
+        if len(ADTuple) > 2:
+            readsAlt = ADTuple[1:(len(ADTuple)-1)]
+            pcentAlt = tuple(map(lambda x: x *100, AF))
+        else:
+            readsAlt = ADTuple[1]
+            pcentAlt = AF *100
+
+        rowDict = {"chromosome": rcrd.chrom,
+                   "position": rcrd.pos,
+                   "ref": rcrd.ref,
+                   "alt": rcrd.alts,
+                   "var_caller": "mutect2",
+                   "reads_ref": readsRef,
+                   "reads_alt": readsAlt,
+                   "freq_alt": AF,
+                   "percent_alt": AF * 100}
+        outDF.loc[len(outDF)] = rowDict
+
+print(outDF)
