@@ -20,4 +20,6 @@ rule all:
         expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz.tbi",
                 sample=samples["sample"],
                 caller=["hapcaller", "freebayes", "lofreq", "mutect2"]),
-        "results/multiqc/multiqc_final.html"
+        "results/multiqc/multiqc_final.html",
+        expand("results/vcf/final/summaries/{sample}_variant_summary.csv",
+                sample=samples["sample"]),

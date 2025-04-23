@@ -3,6 +3,7 @@ import re
 from pathlib import Path
 from pysam import VariantFile 
 import pandas as pd
+from snakemake.script import snakemake
 
 class VCFSummaryBuilder:
     def __init__(self, VariantRecord, inputPath):
@@ -117,13 +118,7 @@ class VCFSummaryBuilder:
         return rowDict
     
 if __name__ == "__main__":
-
-    testVCF1 = Path("/home/oliver/Documents/NGS_analysis/CD7_exon_results/results_TvT10-BM_20250328/vcf/final/TvT10-BM_mutect2_merged_filtered_snpeff.vcf.gz")
-    testVCF2 = Path("/home/oliver/Documents/NGS_analysis/CD7_exon_results/G944_freebayes_merged_filtered_snpeff.vcf.gz")
-    testVCF3 = Path("/home/oliver/Documents/NGS_analysis/CD7_exon_results/results_TvT10-BM_20250328/vcf/final/TvT10-BM_lofreq_merged_filtered_snpeff.vcf.gz")
-    testVCF4 = Path("/home/oliver/Documents/NGS_analysis/CD7_exon_results/results_TvT10-BM_20250328/vcf/final/TvT10-BM_hapcaller_merged_filtered_snpeff.vcf.gz")
-    vcfList = [testVCF1, testVCF2, testVCF3, testVCF4]
-    
+  
     outDF = pd.DataFrame(columns=["chromosome",
                                 "position",
                                 "ref",
@@ -134,13 +129,17 @@ if __name__ == "__main__":
                                 "freq_alt",
                                 "percent_alt"])
     
-    for input in vcfList:
-        with VariantFile(input, "rb") as vcf:
+    for input in snakemake.input:
+        inputPath = Path(input)
+
+        with VariantFile(inputPath, "rb") as vcf:
             for rcrd in vcf.fetch():
-                varSummary = VCFSummaryBuilder(rcrd, input)
+                varSummary = VCFSummaryBuilder(rcrd, inputPath)
                 outDF.loc[len(outDF)] = varSummary.build_output_dict()
 
     outDF.sort_values(["chromosome", "position"],
                       ascending=[True, True],
                       inplace=True)
-    print(outDF)
+    
+    outDF.to_csv(Path(snakemake.output[0]),
+                 index=False)
