@@ -6,3 +6,5 @@ channels:
 dependencies:
 - pysam =0.23
 - samtools
+- pandas
+- snakemake-minimal =8.29
