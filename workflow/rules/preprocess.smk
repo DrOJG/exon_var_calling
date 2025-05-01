@@ -94,7 +94,7 @@ rule cutadapt_remove_primers:
         --action=trim \
         -o {output.fq1_trim_ca} \
         -p {output.fq2_trim_ca} \
-        {input.fq1_trim} {input.fq1_trim}
+        {input.fq1_trim} {input.fq1_trim} > {log} 2>&1
         """
 
 
