@@ -81,8 +81,11 @@ rule cutadapt_remove_primers:
     
     log:
         "results/logs/cutadapt/{sample_name}_cutadapt.log"
+    
     conda:
         "ruleenvs/cutadapt.yml"
+    
+    threads: config["threads"]
     
     shell:
         """
