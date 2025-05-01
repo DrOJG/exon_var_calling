@@ -116,6 +116,6 @@ rule bwa_align_and_sort:
         "ruleenvs/bwa.yml"
     shell:
         """
-        bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim}" "{input.fq2_trim}" |
+        bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim_ca}" "{input.fq2_trim_ca}" |
         samtools sort -@ {threads} -m 1G -o {output} - 
         """
