@@ -16,7 +16,25 @@ def build_fastq_dicts(samples):
 
     return(fq1_dict, fq2_dict)
 
+def get_cutadapt_flags(tsv_file):
+    """
+    Reads in the primer adapters file and prepares them into adapter strings for cutadapt
+    """
+    r1_flags = []
+    r2_flags = []
+    with open(tsv_file) as f:
+        next(f)  # skip header
+        for line in f:
+            fields = line.strip().split('\t')
+            if len(fields) >= 3:
+                r1_flags.append(f"-a {fields[1]}")
+                r2_flags.append(f"-A {fields[2]}")
+    return ' '.join(r1_flags), ' '.join(r2_flags)
+
 fq1_dict, fq2_dict = build_fastq_dicts(samples)
+
+r1_flags_str, r2_flags_str = get_cutadapt_flags(config["primers"])
+
 
 rule fastp_trim_and_filter:
     input:
@@ -48,11 +66,44 @@ rule fastp_trim_and_filter:
         --trim_poly_g > {log} 2>&1
         """
 
-rule bwa_align_and_sort:
-    input:
+rule cutadapt_remove_primers:
+    input: 
         fq1_trim="results/trimmed_fastq/{sample_name}_R1_trimmed.fastq.gz",
         fq2_trim="results/trimmed_fastq/{sample_name}_R2_trimmed.fastq.gz",
+    
+    output:
+        fq1_trim_ca=temp("results/trimmed_fastq/{sample_name}_R1_trimmed_cutadapt.fastq.gz"),
+        fq2_trim_ca=temp("results/trimmed_fastq/{sample_name}_R2_trimmed_cutadapt.fastq.gz"),
+
+    params:
+        r1_primers=r1_flags_str,
+        r2_primers=r2_flags_str,
+    
+    log:
+        "results/logs/cutadapt/{sample_name}_cutadapt.log"
+    conda:
+        "ruleenvs/cutadapt.yml"
+    
+    shell:
+        """
+        cutadapt {params.r1_primers} \
+        {params.r2_primers} \
+        --discard-untrimmed \
+        --pair-adapters \
+        --times 1 \
+        --action=trim \
+        -o {output.fq1_trim_ca} \
+        -p {output.fq2_trim_ca} \
+        {input.fq1_trim} {input.fq1_trim}
+        """
+
+
+rule bwa_align_and_sort:
+    input:
+        fq1_trim_ca="results/trimmed_fastq/{sample_name}_R1_trimmed_cutadapt.fastq.gz",
+        fq2_trim_ca="results/trimmed_fastq/{sample_name}_R2_trimmed_cutadapt.fastq.gz",
         ref=config["reference"]
+    
     output:
         temp("results/aligned_bams/{sample_name}_sorted.bam")
 
