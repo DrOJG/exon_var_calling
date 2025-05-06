@@ -92,9 +92,9 @@ rule cutadapt_remove_primers:
         cutadapt {params.r1_primers} \
         {params.r2_primers} \
         --discard-untrimmed \
-        --pair-adapters \
         --times 1 \
         --action=trim \
+        -m 150 \
         -o {output.fq1_trim_ca} \
         -p {output.fq2_trim_ca} \
         {input.fq1_trim} {input.fq1_trim} > {log} 2>&1
@@ -115,10 +115,12 @@ rule bwa_align_and_sort:
 
     threads: config["threads"]
     
+    log:
+        "results/logs/bwa/{sample_name}_bwa.log"
     conda:
         "ruleenvs/bwa.yml"
     shell:
         """
         bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim_ca}" "{input.fq2_trim_ca}" |
-        samtools sort -@ {threads} -m 1G -o {output} - 
+        samtools sort -@ {threads} -m 1G -o {output} - > {log} 2>&1
         """
