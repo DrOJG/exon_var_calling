@@ -23,7 +23,7 @@ This workflow is designed for finding exonic variants in a gene of interest, by 
 
 ### **Outputs**
 **Final outputs will be:**
-* Individual aligned BAM files for every sequenced sample. BAM files are sorted, and base score recalibrated.
+* Individual aligned BAM files for every sequenced sample. BAM files are sorted, and base quality score recalibrated.
 * Merged and filtered VCF files for every samples for all exons. Varient calling with: Haplotypecaller, Mutect2, Lofreq and Freebayes. Annotated with SNPEff.
 * MultiQC report summarising outputs.
 * A summary CSV file for each sample with all variants called by the 4 tools.
