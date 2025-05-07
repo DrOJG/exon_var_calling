@@ -4,7 +4,7 @@
 ### **Inputs**
 **This workflow will take the following inputs:** 
 * Folder of raw, paired fastq files (R1 and R2 for each sample).  
-* Sample table with columns: [id, sample, exon, fq1, fq2]:
+* Sample table with columns [id, sample, exon, fq1, fq2]:
   - **id**: a unique identifier for indexing, usual just use numbers 1, 2, 3... etc.
   - **sample**: A sample name, that will be shared between different exons of the same sample. Will be the final name of merged samples and vcfs. No spaces or underscores.
   - **exon**: Exon identifier, e.g. ex1, Exon2. No spaces or underscores.
@@ -15,8 +15,8 @@
 * A BED file with the target regions of your sequencing. Can either be your specific amplicons or a region encompassing your whole gene of interest
 * A tab-delimited table with columns [amplicon, r1_adapter, r2_adapter]:
   - **amplicon**: An amplicon identifier for your exon PCRs. Name not used, just for reference.
-  - **r1_adapter**: a linked adapter for cutadapt to remove PCR primers from read 1, in form: ^FWDPRIMER...RCREVPRIMER.
-  - **r2_adapter**: a linked adapter for cutadapt to remove PCR primers from read 2, in form: ^REVPRIMER...RCFWDPRIMER.
+  - **r1_adapter**: a linked adapter for cutadapt to remove PCR primers from read 1, in form ^FWDPRIMER...RCREVPRIMER.
+  - **r2_adapter**: a linked adapter for cutadapt to remove PCR primers from read 2, in form ^REVPRIMER...RCFWDPRIMER.
 * config.yaml file with general options plus paths to reference, sample table, primer adapters table etc.  
 
 
@@ -58,5 +58,11 @@
   ```
 * A runscript is provided which can be used for job submission on SGE computer clusters. Note that the workflow currently only runs on a single cluster node.
 
+### **Limitations**
 
+* Currently, the workflow does not carry out any PCR de-duplication. This is not possible for amplicon sequencing without UMIs. UMI support may be added in the future if these start to be used in the sequencing strategy.
+
+* The current workflow does not download or index reference genome automatically, hoping to add support for this in the future.
+
+* Currently, workflow only trims Illumina TruSeq adapters. Will add customisable seq adapters in the future.
 
