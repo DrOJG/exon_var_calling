@@ -1,5 +1,6 @@
 # **Snakemake workflow for single gene exon variant calling**
 
+This workflow is designed for finding exonic variants in a gene of interest, by illumina short-read amplicon sequencing of each individual exon. Variants are called in each exon and subsequently merged for filtering and final summary.
 
 ### **Inputs**
 **This workflow will take the following inputs:** 
