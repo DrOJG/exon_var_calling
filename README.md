@@ -33,7 +33,7 @@ This workflow is designed for finding exonic variants in a gene of interest, by 
 **Will follow same schema we have been using for exon analysis Bash scripts:**  
 1. Trim and quality filter with fastp.  
 2. Remove PCR primers from reads with cutadapt
-3. Align each file to reference genome (Single chromosome hg38 ref) with BWA-MEM (Maybe BWA-MEM2 as it is faster).  
+3. Align each file to reference genome with BWA-MEM (Recommended: hg38 human genome). 
 4. Carry out base quality score recalibration with GATK baserecalibrator and ApplyBQSR.  
 5. Index output BAM files with samtools.
 6. Variant calling with Haplotypecaller, Mutect2, Lofreq and Freebayes.
