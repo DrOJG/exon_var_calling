@@ -45,7 +45,7 @@ This workflow is designed for finding exonic variants in a gene of interest, by 
 11. Get mapping stats for BAM files with samtools flagstat.
 12. Summarise QC and metrics with MultiQC.
 
-### **Useage**
+### **Usage**
 
 * Make sure to update the the config.yaml file with paths to inputs, and to create the sample and primer tables.
 * Create a conda env from the provided `snakemake.yml` file with:
