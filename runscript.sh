@@ -7,7 +7,7 @@
 
 
 # Set the name of the job.
-#$ -N cd7_exon_align
+#$ -N Exon_align_smk
 
 # Request 12 cores.
 #$ -pe smp 12
