@@ -74,6 +74,7 @@ rule cutadapt_remove_primers:
     output:
         fq1_trim_ca=temp("results/trimmed_fastq/{sample_name}_R1_trimmed_cutadapt.fastq.gz"),
         fq2_trim_ca=temp("results/trimmed_fastq/{sample_name}_R2_trimmed_cutadapt.fastq.gz"),
+        json="results/logs/cutadapt_json/{sample_name}.cutadapt.json",
 
     params:
         r1_primers=r1_flags_str,
@@ -97,6 +98,7 @@ rule cutadapt_remove_primers:
         -m 150 \
         -o {output.fq1_trim_ca} \
         -p {output.fq2_trim_ca} \
+        --json={output.json} \
         {input.fq1_trim} {input.fq2_trim} > {log} 2>&1
         """
 

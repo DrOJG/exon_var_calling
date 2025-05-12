@@ -25,6 +25,9 @@ rule multiqc_all:
         expand("results/snpeff_stats/{sample}_{caller}_snpeff.csv",
                 sample=samples["sample"],
                 caller=["hapcaller", "freebayes", "lofreq", "mutect2"]),
+        expand("results/logs/cutadapt_json/{sample}_{exon}.cutadapt.json",
+                sample=samples["sample"],
+                exon=samples["exon"]),
     output:
         "results/multiqc/multiqc_final.html",
         directory("results/multiqc/multiqc_data"),
