@@ -38,8 +38,8 @@ r1_flags_str, r2_flags_str = get_cutadapt_flags(config["primers"])
 
 rule fastp_trim_and_filter:
     input:
-        fq1=lambda wildcards: "data/" + fq1_dict[wildcards.sample_name],
-        fq2=lambda wildcards: "data/" + fq2_dict[wildcards.sample_name],
+        fq1=lambda wildcards: config["fastqDir"] + fq1_dict[wildcards.sample_name],
+        fq2=lambda wildcards: config["fastqDir"] + fq2_dict[wildcards.sample_name],
     
     output:
         fq1_trim=temp("results/trimmed_fastq/{sample_name}_R1_trimmed.fastq.gz"),

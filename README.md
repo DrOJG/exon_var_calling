@@ -18,7 +18,7 @@ This workflow is designed for finding exonic variants in a gene of interest, by 
   - **amplicon**: An amplicon identifier for your exon PCRs. Name not used, just for reference.
   - **r1_adapter**: a linked adapter for cutadapt to remove PCR primers from read 1, in form ^FWDPRIMER...RCREVPRIMER.
   - **r2_adapter**: a linked adapter for cutadapt to remove PCR primers from read 2, in form ^REVPRIMER...RCFWDPRIMER.
-* config.yaml file with general options plus paths to reference, sample table, primer adapters table etc.  
+* config.yaml file with general options plus paths to fastq directory, reference, sample table, primer adapters table etc.  
 
 
 ### **Outputs**
