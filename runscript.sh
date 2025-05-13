@@ -1,10 +1,9 @@
 #!/bin/bash -l
-# Request 4 hrs of wallclock time (format hours:minutes:seconds).
-#$ -l h_rt=4:00:00
+# Request 8 hrs of wallclock time (format hours:minutes:seconds).
+#$ -l h_rt=8:00:00
 
-# Request 8 gigabyte of RAM
+# Request 8 gigabyte of RAM per core
 #$ -l mem=8G
-
 
 # Set the name of the job.
 #$ -N Exon_align_smk
