@@ -1,6 +1,6 @@
 threads: 8
 fastqDir: "data/"
-samples: "config/samples_TvT10.tsv"
+samples: "config/samples_TvTp4.tsv"
 reference: "resources/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna"
 refdict: "resources/GCA_000001405.15_GRCh38_no_alt_analysis_set.dict"
 known: "resources/00-common_all.vcf.gz"
