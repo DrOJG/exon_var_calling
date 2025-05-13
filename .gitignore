@@ -177,6 +177,6 @@ cython_debug/
 data/
 resources/
 results/
-
+Tvt_p4_fastq/
 #Snakemake specific
 .snakemake
