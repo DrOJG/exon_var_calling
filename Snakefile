@@ -12,6 +12,7 @@ samples = pd.read_table(config["samples"]).set_index("id", drop=False)
 rule all:
     input:
         expand("results/final_bams/{sample}_{exon}_sorted_bqsr.bam",
+                zip, #This keeps the sample table relational - accounts for different exon nums
                 sample=samples["sample"],
                 exon=samples["exon"]),
         expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",

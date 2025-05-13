@@ -17,15 +17,18 @@ rule samtools_flagstat:
 rule multiqc_all:
     input:
         expand("results/logs/fastp/{sample}_{exon}_fastp.json",
+                zip, # Keeps sample table relational per-row
                 sample=samples["sample"],
                 exon=samples["exon"]),
         expand("results/flagstat/{sample}_{exon}_sorted_bqsr.bam.flagstat",
+                zip,
                 sample=samples["sample"],
                 exon=samples["exon"]),
         expand("results/snpeff_stats/{sample}_{caller}_snpeff.csv",
                 sample=samples["sample"],
                 caller=["hapcaller", "freebayes", "lofreq", "mutect2"]),
         expand("results/logs/cutadapt_json/{sample}_{exon}.cutadapt.json",
+                zip,
                 sample=samples["sample"],
                 exon=samples["exon"]),
     output:
