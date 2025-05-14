@@ -47,6 +47,8 @@ rule fix_mutect_header:
         vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter_fixed.vcf.gz"),
     log:
         "results/logs/gatk/fix_mutect_header/{sample_name}_header_fix.log",
+    conda:
+        "ruleenvs/bcftools.yml"
     shell:
         """
         # Takes header, changes Number definition of AS_FilterStatus to '.'
