@@ -40,6 +40,34 @@ rule gatk_filtermutectcalls:
     wrapper:
         "v5.9.0/bio/gatk/filtermutectcalls"
 
+rule fix_mutect_header:
+    input:
+        vcf="results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz",
+    output:
+        vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter_fixed.vcf.gz"),
+    log:
+        "results/logs/gatk/fix_mutect_header/{sample_name}_header_fix.log",
+    shell:
+        """
+        # Takes header, changes Number definition of AS_FilterStatus to '.'
+        # (varies/unknown/undefined) and reheaders
+        
+        bcftools view -h {input.vcf} |
+        sed '/^##INFO=<ID=AS_FilterStatus/s/Number=A/Number=\./' |
+        bcftools reheader -h - -o {output.vcf} {input.vcf} > {log} 2>&1
+        """
+
+rule bcftools_index_mutect_fixed:
+    input:
+        "results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter_fixed.vcf.gz",
+    output:
+        temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter_fixed.vcf.gz.tbi"),
+    log:
+        "results/logs/bcftools_index/{sample_name}_mutect_fixed.log",
+    wrapper:
+        "v5.9.0/bio/bcftools/index"
+
+
 rule bcftools_merge_haplotypecaller:
     input:
         calls=expand("results/vcf/haplotypecaller/{sample}_{item.exon}_hapcaller.vcf.gz",
@@ -99,10 +127,10 @@ rule bcftools_merge_lofreq:
 
 rule bcftools_merge_mutect:
     input:
-        calls=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter.vcf.gz",
+        calls=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter_fixed.vcf.gz",
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
-        idx=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter.vcf.gz.tbi",
+        idx=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter_fixed.vcf.gz.tbi",
                         item=lookup(query="sample == '{sample}'", within=samples),
                         allow_missing=True),
     output:
