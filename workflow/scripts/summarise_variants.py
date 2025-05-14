@@ -84,8 +84,12 @@ class VCFSummaryBuilder:
     def calculate_percent_frequency(self):
         readsRef = self.ADTuple[0]
         if len(self.ADTuple) > 2:
+            if any(entry is None for entry in self.AF):
+                correctAF = [0 if entry is None else entry for entry in self.AF]
+            else:
+                correctAF = self.AF
             readsAlt = self.ADTuple[1:(len(self.ADTuple)-1)]
-            pcentAlt = tuple(map(lambda x: x * 100, self.AF))
+            pcentAlt = tuple(map(lambda x: x * 100, correctAF))
         else:
             readsAlt = self.ADTuple[1]
             pcentAlt = self.AF * 100
