@@ -1,6 +1,6 @@
 configfile: "config/config.yaml"
 
-rule haplotype_caller:
+rule haplotypecaller:
     input:
         bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
         idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
@@ -8,8 +8,8 @@ rule haplotype_caller:
         known=config["known"],
         interval=config["regions"], # optional
     output:
-        vcf="results/vcf/haplotypecaller/{sample_name}_hapcaller.vcf.gz",
-        idx="results/vcf/haplotypecaller/{sample_name}_hapcaller.vcf.gz.tbi"
+        vcf="results/vcf/haplotypecaller/{sample_name}_haplotypecaller.vcf.gz",
+        idx="results/vcf/haplotypecaller/{sample_name}_haplotypecaller.vcf.gz.tbi"
     log:
         "results/logs/gatk/haplotypecaller/{sample_name}.log",
     params:
