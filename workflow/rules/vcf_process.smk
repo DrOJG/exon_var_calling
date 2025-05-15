@@ -96,11 +96,11 @@ rule filter_vcfs:
 
 rule bcftools_index_filtered:
     input:
-        "results/vcf/filtered/{vcf}.vcf.gz",
+        "results/vcf/filtered/{vcf_name}.vcf.gz",
     output:
-        temp("results/vcf/filtered/{vcf}.vcf.gz.tbi"),
+        temp("results/vcf/filtered/{vcf_name}.vcf.gz.tbi"),
     log:
-        "results/logs/bcftools_index/{vcf}.log",
+        "results/logs/bcftools_index/{vcf_name}.log",
     wrapper:
         "v5.9.0/bio/bcftools/index"
 
@@ -266,7 +266,7 @@ rule gatk_filtermutectcalls:
         vcf=temp("results/vcf/mutect2_merged_filter/{sample}_mutect2_merged_filtered.vcf.gz"),
         idx=temp("results/vcf/mutect2__merged_filter/{sample}_mutect2_merged_filtered.vcf.gz.tbi"),
     log:
-        "results/logs/gatk/filtermutect/{sample_name}_mutect_merged_filter.log",
+        "results/logs/gatk/filtermutect/{sample}_mutect_merged_filter.log",
     params:
         extra="--max-alt-allele-count 4 --max-events-in-region 10 --create-output-variant-index",
     resources:
@@ -292,7 +292,7 @@ def get_snpeff_input(wildcards):
         suffix = "merged_filtered.vcf.gz"
     else:
         sourceDir = "results/vcf/merged/"
-        suffix = "merged_filtered.vcf.gz"
+        suffix = "merged.vcf.gz"
     return f"{sourceDir}{wildcards.sample}_{wildcards.caller}_{suffix}"
 
 rule snpeff:
