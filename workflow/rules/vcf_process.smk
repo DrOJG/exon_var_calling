@@ -120,7 +120,7 @@ rule bcftools_concat_haplotypecaller:
         "results/logs/concat_haplotypecaller/{sample}_haplotypecaller_merged.log",
     params:
         uncompressed_bcf=False,
-        extra="--allow-overlaps --rm-dups --write-index=tbi",
+        extra="--allow-overlaps --rm-dups both --write-index=tbi",
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
@@ -139,7 +139,7 @@ rule bcftools_concat_freebayes:
         "results/logs/concat_freebayes/{sample}_freebayes_merged.log",
     params:
         uncompressed_bcf=False,
-        extra="--allow-overlaps --rm-dups --write-index=tbi",
+        extra="--allow-overlaps --rm-dups both --write-index=tbi",
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
@@ -158,7 +158,7 @@ rule bcftools_concat_lofreq:
         "results/logs/concat_lofreq/{sample}_lofreq_merged.log",
     params:
         uncompressed_bcf=False,
-        extra="--allow-overlaps --rm-dups --write-index=tbi",
+        extra="--allow-overlaps --rm-dups both --write-index=tbi",
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
@@ -177,7 +177,7 @@ rule bcftools_concat_mutect:
         "results/logs/concat_mutect2/{sample}_mutect2_merged.log",
     params:
         uncompressed_bcf=False,
-        extra="--allow-overlaps --rm-dups --write-index=tbi",
+        extra="--allow-overlaps --rm-dups both --write-index=tbi",
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
