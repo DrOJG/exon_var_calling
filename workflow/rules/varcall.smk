@@ -55,12 +55,45 @@ rule lofreq:
     wrapper:
         "v5.9.0/bio/lofreq/call"
 
+rule gatk_get_pileup_summaries:
+    input:
+        bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
+        intervals=config["regions"],
+        variants=config["known"],
+    output:
+        "results/pileups/{sample_name}_pileups.table",
+    threads: 2
+    resources:
+        mem_mb=1024,
+    params:
+        extra="",
+    log:
+        "results/logs/gatk/get_pileups/{sample_name}_summary.log",
+    wrapper:
+        "v6.2.0/bio/gatk/getpileupsummaries"
+
+rule gatk_calculate_contamination:
+    input:
+        tumor="results/pileups/{sample_name}_pileups.table",
+    output:
+        "results/contamination/{sample_name}_contamination.table",
+    threads: 2
+    resources:
+        mem_mb=1024,
+    log:
+        "results/logs/gatk/calculate_contamination/{sample_name}_contamination.log",
+    params:
+        extra="",
+    wrapper:
+        "v6.2.0/bio/gatk/calculatecontamination"
+
 rule mutect2:
     input:
         fasta=config["reference"],
         map="results/final_bams/{sample_name}_sorted_bqsr.bam",
         idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
         interval=config["regions"],
+        pon=config["pon"]
     output:
         vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
         idx="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz.tbi",

@@ -28,6 +28,7 @@ rule gatk_filtermutectcalls:
     input:
         vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
         ref=config["reference"],
+        contamination="results/contamination/{sample_name}_contamination.table",
     output:
         vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz"),
         idx=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz.tbi"),
