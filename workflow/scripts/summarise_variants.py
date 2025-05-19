@@ -18,7 +18,7 @@ class VCFSummaryBuilder:
     def assign_var_caller(self):
         if re.search('mutect', self.filename) is not None:
             return "Mutect2"
-        elif re.search('hapcaller', self.filename) is not None:
+        elif re.search('haplotypecaller', self.filename) is not None:
             return "HaplotypeCaller"
         elif re.search('lofreq', self.filename) is not None:
             return "Lofreq"

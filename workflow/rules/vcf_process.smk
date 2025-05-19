@@ -240,15 +240,15 @@ rule bcftools_index_final_vcf:
     wrapper:
         "v5.9.0/bio/bcftools/index"
 
-# rule summarise_vcf_files:
-#     input:
-#         expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",
-#                 caller=["hapcaller", "freebayes", "lofreq", "mutect2"],
-#                 allow_missing=True),
-#     output:
-#         "results/vcf/final/summaries/{sample}_variant_summary.csv"
-#     threads: 2
-#     conda:
-#         "ruleenvs/pysam.yml"
-#     script:
-#         "../scripts/summarise_variants.py"
+rule summarise_vcf_files:
+    input:
+        expand("results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",
+                caller=["haplotypecaller", "freebayes", "lofreq", "mutect2"],
+                allow_missing=True),
+    output:
+        "results/vcf/final/summaries/{sample}_variant_summary.csv"
+    threads: 2
+    conda:
+        "ruleenvs/pysam.yml"
+    script:
+        "../scripts/summarise_variants.py"

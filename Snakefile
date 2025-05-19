@@ -22,5 +22,5 @@ rule all:
                 sample=samples["sample"],
                 caller=["haplotypecaller", "freebayes", "lofreq", "mutect2"]),
         "results/multiqc/multiqc_final.html",
-        # expand("results/vcf/final/summaries/{sample}_variant_summary.csv",
-        #         sample=samples["sample"]),
+        expand("results/vcf/final/summaries/{sample}_variant_summary.csv",
+                sample=samples["sample"]),
