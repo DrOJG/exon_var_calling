@@ -24,25 +24,25 @@ rule bcftools_index_lofreq:
     wrapper:
         "v5.9.0/bio/bcftools/index"
 
-# rule gatk_filtermutectcalls:
-#     input:
-#         vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
-#         ref=config["reference"],
-#     output:
-#         vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz"),
-#         idx=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz.tbi"),
-#     log:
-#         "results/logs/gatk/filtermutect/{sample_name}_mutect_filter.log",
-#     params:
-#         extra="--max-alt-allele-count 4 --max-events-in-region 10 --create-output-variant-index",
-#     resources:
-#         mem_mb=4096,
-#     wrapper:
-#         "v5.9.0/bio/gatk/filtermutectcalls"
+rule gatk_filtermutectcalls:
+    input:
+        vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
+        ref=config["reference"],
+    output:
+        vcf=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz"),
+        idx=temp("results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz.tbi"),
+    log:
+        "results/logs/gatk/filtermutect/{sample_name}_mutect_filter.log",
+    params:
+        extra="--max-alt-allele-count 4 --max-events-in-region 10 --create-output-variant-index",
+    resources:
+        mem_mb=4096,
+    wrapper:
+        "v5.9.0/bio/gatk/filtermutectcalls"
 
 rule fix_mutect_header:
     input:
-        vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
+        vcf="results/vcf/mutect2_filter/{sample_name}_mutect2_prefilter.vcf.gz",
     output:
         vcf=temp("results/vcf/mutect2_fixed/{sample_name}_mutect2.vcf.gz"),
     log:
@@ -80,6 +80,15 @@ def get_filter_index(wildcards):
     vcf = get_filter_vcf(wildcards)
     return f"{vcf}.tbi"
 
+def get_filter_string(wildcards):
+    if wildcards.caller == "mutect2":
+        # Depth only filtering for mutect as it does not output QUAL
+        filterString = "-i 'INFO/DP>=1000'"
+    else:
+        filterString = "-i 'INFO/DP>=1000 && QUAL>=20'"
+    
+    return filterString
+
 rule filter_vcfs:
     input:
         vcf=get_filter_vcf,
@@ -90,7 +99,7 @@ rule filter_vcfs:
     log:
         "results/logs/bcftools_filter/{sample_name}_{caller}_filtered.vcf.gz.log",
     params:
-        filter="-i 'INFO/DP>=1000 && QUAL>=20'",
+        filter=get_filter_string,
     wrapper:
         "v5.9.0/bio/bcftools/filter"
 
@@ -121,6 +130,9 @@ rule bcftools_concat_haplotypecaller:
     params:
         uncompressed_bcf=False,
         extra="--allow-overlaps --rm-dups both --write-index=tbi",
+    threads: config["threads"]
+    resources:
+        mem_mb=1024,
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
@@ -140,6 +152,9 @@ rule bcftools_concat_freebayes:
     params:
         uncompressed_bcf=False,
         extra="--allow-overlaps --rm-dups both --write-index=tbi",
+    threads: config["threads"]
+    resources:
+        mem_mb=1024,
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
@@ -159,6 +174,9 @@ rule bcftools_concat_lofreq:
     params:
         uncompressed_bcf=False,
         extra="--allow-overlaps --rm-dups both --write-index=tbi",
+    threads: config["threads"]
+    resources:
+        mem_mb=1024,
     wrapper:
         "v6.1.0/bio/bcftools/concat"
 
@@ -178,101 +196,11 @@ rule bcftools_concat_mutect:
     params:
         uncompressed_bcf=False,
         extra="--allow-overlaps --rm-dups both --write-index=tbi",
+    threads: config["threads"]
+    resources:
+        mem_mb=1024,
     wrapper:
         "v6.1.0/bio/bcftools/concat"
-
-# rule bcftools_merge_haplotypecaller:
-#     input:
-#         calls=expand("results/vcf/haplotypecaller/{sample}_{item.exon}_hapcaller.vcf.gz",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#         idx=expand("results/vcf/haplotypecaller/{sample}_{item.exon}_hapcaller.vcf.gz.tbi",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#     output:
-#         temp("results/vcf/merged/{sample}_hapcaller_merged.vcf.gz"),
-#         temp("results/vcf/merged/{sample}_hapcaller_merged.vcf.gz.tbi"),
-#     log:
-#         "results/logs/merge_hapcaller/{sample}_hapcaller_merged.log",
-#     params:
-#         uncompressed_bcf=False,
-#         extra="--merge both --write-index=tbi",
-#     wrapper:
-#         "v5.9.0/bio/bcftools/merge"
-
-# rule bcftools_merge_freebayes:
-#     input:
-#         calls=expand("results/vcf/freebayes/{sample}_{item.exon}_freebayes.vcf.gz",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#         idx=expand("results/vcf/freebayes/{sample}_{item.exon}_freebayes.vcf.gz.tbi",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#     output:
-#         temp("results/vcf/merged/{sample}_freebayes_merged.vcf.gz"),
-#         temp("results/vcf/merged/{sample}_freebayes_merged.vcf.gz.tbi"),
-#     log:
-#         "results/logs/merge_freebayes/{sample}_freebayes_merged.log",
-#     params:
-#         uncompressed_bcf=False,
-#         extra="--merge both --write-index=tbi",
-#     wrapper:
-#         "v5.9.0/bio/bcftools/merge"
-
-# rule bcftools_merge_lofreq:
-#     input:
-#         calls=expand("results/vcf/lofreq/{sample}_{item.exon}_lofreq.vcf.gz",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#         idx=expand("results/vcf/lofreq/{sample}_{item.exon}_lofreq.vcf.gz.tbi",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#     output:
-#         temp("results/vcf/merged/{sample}_lofreq_merged.vcf.gz"),
-#         temp("results/vcf/merged/{sample}_lofreq_merged.vcf.gz.tbi"),
-#     log:
-#         "results/logs/merge_lofreq/{sample}_lofreq_merged.log",
-#     params:
-#         uncompressed_bcf=False,"results/vcf/merged/{sample}_{caller}_merged.vcf.gz.tbi"
-#         extra="--merge both --write-index=tbi",
-#     wrapper:
-#         "v5.9.0/bio/bcftools/merge"
-
-# rule bcftools_merge_mutect:
-#     input:
-#         calls=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter_fixed.vcf.gz",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#         idx=expand("results/vcf/mutect2_filter/{sample}_{item.exon}_mutect2_prefilter_fixed.vcf.gz.tbi",
-#                         item=lookup(query="sample == '{sample}'", within=samples),
-#                         allow_missing=True),
-#     output:
-#         # Merge mutect2 vcfs directly to filtered as already filtered
-#         temp("results/vcf/filtered/{sample}_mutect2_merged_filtered.vcf.gz"),
-#         temp("results/vcf/filtered/{sample}_mutect2_merged_filtered.vcf.gz.tbi"),
-#     log:
-#         "results/logs/merge_mutect/{sample}_mutect2_merged.log",
-#     params:
-#         uncompressed_bcf=False,
-#         extra="--merge both --write-index=tbi",
-#     wrapper:
-#         "v5.9.0/bio/bcftools/merge"
-
-rule gatk_filtermutectcalls:
-    input:
-        vcf="results/vcf/merged/{sample}_mutect2_merged.vcf.gz",
-        ref=config["reference"],
-    output:
-        vcf=temp("results/vcf/mutect2_merged_filter/{sample}_mutect2_merged_filtered.vcf.gz"),
-        idx=temp("results/vcf/mutect2__merged_filter/{sample}_mutect2_merged_filtered.vcf.gz.tbi"),
-    log:
-        "results/logs/gatk/filtermutect/{sample}_mutect_merged_filter.log",
-    params:
-        extra="--max-alt-allele-count 4 --max-events-in-region 10 --create-output-variant-index",
-    resources:
-        mem_mb=4096,
-    wrapper:
-        "v5.9.0/bio/gatk/filtermutectcalls"
 
 rule snpeff_download:
     output:
@@ -286,18 +214,9 @@ rule snpeff_download:
     wrapper:
         "v5.9.0/bio/snpeff/download"
 
-def get_snpeff_input(wildcards):
-    if wildcards.caller == "mutect2":
-        sourceDir = "results/vcf/mutect2_merged_filter/"
-        suffix = "merged_filtered.vcf.gz"
-    else:
-        sourceDir = "results/vcf/merged/"
-        suffix = "merged.vcf.gz"
-    return f"{sourceDir}{wildcards.sample}_{wildcards.caller}_{suffix}"
-
 rule snpeff:
     input:
-        calls=get_snpeff_input, # (vcf, bcf, or vcf.gz)
+        calls="results/vcf/merged/{sample}_{caller}_merged.vcf.gz", # (vcf, bcf, or vcf.gz)
         db="snpeff/hg38" # path to reference db downloaded with the snpeff download wrapper
     output:
         calls="results/vcf/final/{sample}_{caller}_merged_filtered_snpeff.vcf.gz",   # annotated calls (vcf, bcf, or vcf.gz)

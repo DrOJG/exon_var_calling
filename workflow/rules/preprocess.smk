@@ -105,20 +105,20 @@ rule cutadapt_remove_primers:
 
 rule bwa_align_and_sort:
     input:
-        fq1_trim_ca="results/trimmed_fastq/{sample_name}_R1_trimmed_cutadapt.fastq.gz",
-        fq2_trim_ca="results/trimmed_fastq/{sample_name}_R2_trimmed_cutadapt.fastq.gz",
+        fq1_trim_ca="results/trimmed_fastq/{sample}_{exon}_R1_trimmed_cutadapt.fastq.gz",
+        fq2_trim_ca="results/trimmed_fastq/{sample}_{exon}_R2_trimmed_cutadapt.fastq.gz",
         ref=config["reference"]
     
     output:
-        temp("results/aligned_bams/{sample_name}_sorted.bam")
+        temp("results/aligned_bams/{sample}_{exon}_sorted.bam")
 
     params:
-        rg=r"@RG\tID:{sample_name}\tSM:{sample_name}\tPL:ILLUMINA"
+        rg=r"@RG\tID:{sample}_{exon}\tSM:{sample}\tPL:ILLUMINA"
 
     threads: config["threads"]
     
     log:
-        "results/logs/bwa/{sample_name}_bwa.log"
+        "results/logs/bwa/{sample}_{exon}_bwa.log"
     conda:
         "ruleenvs/bwa.yml"
     shell:
