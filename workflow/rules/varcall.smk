@@ -58,8 +58,9 @@ rule lofreq:
 rule gatk_get_pileup_summaries:
     input:
         bam="results/final_bams/{sample_name}_sorted_bqsr.bam",
+        idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
         intervals=config["regions"],
-        variants=config["known"],
+        variants=config["germline"],
     output:
         "results/pileups/{sample_name}_pileups.table",
     threads: 2
@@ -93,7 +94,7 @@ rule mutect2:
         map="results/final_bams/{sample_name}_sorted_bqsr.bam",
         idx="results/final_bams/{sample_name}_sorted_bqsr.bam.bai",
         interval=config["regions"],
-        pon=config["pon"]
+        pon=config["pon"],
     output:
         vcf="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz",
         idx="results/vcf/mutect2/{sample_name}_mutect2.vcf.gz.tbi",
