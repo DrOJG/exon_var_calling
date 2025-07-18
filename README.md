@@ -13,6 +13,8 @@ This workflow is designed for finding exonic variants in a gene of interest, by 
   - **fq2**: full filename of read 2 FASTQ file, including extension. do not include path.
 * Reference genome. Should be indexed with BWA, samtools faidx and Picard CreateSequenceDictionary. Currently script does not do this automatically.
 * Common sites VCF compatible with your reference genome.
+* A panel of normals (PON). Ideally this would be generated for your specific sequencing protocol, but if this is not available the PON publicly available from the GATK best practices google cloud repo can be used.
+* A germline reference vcf, again this can be taken rom the GATK best practices google cloud repo.
 * A BED file with the target regions of your sequencing. Can either be your specific amplicons or a region encompassing your whole gene of interest
 * A tab-delimited table with columns [amplicon, r1_adapter, r2_adapter]:
   - **amplicon**: An amplicon identifier for your exon PCRs. Name not used, just for reference.
@@ -29,8 +31,7 @@ This workflow is designed for finding exonic variants in a gene of interest, by 
 * A summary CSV file for each sample with all variants called by the 4 tools.
 
 
-### **Pipeline**
-**Will follow same schema we have been using for exon analysis Bash scripts:**  
+### **Pipeline**   
 1. Trim and quality filter with fastp.  
 2. Remove PCR primers from reads with cutadapt
 3. Align each file to reference genome with BWA-MEM (Recommended: hg38 human genome). 
