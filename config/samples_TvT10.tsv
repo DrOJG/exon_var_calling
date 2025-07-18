@@ -1,5 +1,0 @@
-id	sample	exon	fq1	fq2
-1	TvT10-BM	ex1	TvT10-BM-ex1_R1_001.fastq.gz	TvT10-BM-ex1_R2_001.fastq.gz
-2	TvT10-BM	ex2	TvT10-BM-ex2_R1_001.fastq.gz	TvT10-BM-ex2_R2_001.fastq.gz
-3	TvT10-BM	ex3	TvT10-BM-ex3_R1_001.fastq.gz	TvT10-BM-ex3_R2_001.fastq.gz
-4	TvT10-BM	ex4	TvT10-BM-ex4_R1_001.fastq.gz	TvT10-BM-ex4_R2_001.fastq.gz

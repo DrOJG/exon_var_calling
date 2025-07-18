@@ -1,0 +1,5 @@
+id	sample	exon	fq1	fq2
+1	ctrl1	Exon1	ctrl1Exon1_R1_001.fastq.gz	ctrl1Exon1_R2_001.fastq.gz
+2	ctrl1	Exon2	ctrl1Exon2_R1_001.fastq.gz	ctrl1Exon2_R2_001.fastq.gz
+3	ctrl1	Exon3	ctrl1Exon3_R1_001.fastq.gz	ctrl1Exon3_R2_001.fastq.gz
+4	ctrl1	Exon4	ctrl1Exon4_R1_001.fastq.gz	ctrl1Exon4_R2_001.fastq.gz

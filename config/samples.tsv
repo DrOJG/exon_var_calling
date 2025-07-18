@@ -1,9 +1,0 @@
-id	sample	exon	fq1	fq2
-1	G941	Exon1	G941Exon1_R1_001.fastq.gz	G941Exon1_R2_001.fastq.gz
-2	G941	Exon2	G941Exon2_R1_001.fastq.gz	G941Exon2_R2_001.fastq.gz
-3	G941	Exon3	G941Exon3_R1_001.fastq.gz	G941Exon3_R2_001.fastq.gz
-4	G941	Exon4	G941Exon4_R1_001.fastq.gz	G941Exon4_R2_001.fastq.gz
-5	G944	Exon1	G944Exon1_R1_001.fastq.gz	G944Exon1_R2_001.fastq.gz
-6	G944	Exon2	G944Exon2_R1_001.fastq.gz	G944Exon2_R2_001.fastq.gz
-7	G944	Exon3	G944Exon3_R1_001.fastq.gz	G944Exon3_R2_001.fastq.gz
-8	G944	Exon4	G944Exon4_R1_001.fastq.gz	G944Exon4_R2_001.fastq.gz

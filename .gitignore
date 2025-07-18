@@ -178,5 +178,6 @@ data/
 resources/
 results/
 Tvt_p4_fastq/
+my_sample_tables/
 #Snakemake specific
 .snakemake
