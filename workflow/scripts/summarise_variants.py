@@ -120,6 +120,7 @@ class VCFSummaryBuilder:
                    "freq_alt": AFFormatted,
                    "percent_alt": pcentAltFormatted}
         return rowDict
+
     
 if __name__ == "__main__":
   
