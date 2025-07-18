@@ -16,6 +16,7 @@ def build_fastq_dicts(samples):
 
     return(fq1_dict, fq2_dict)
 
+
 def get_cutadapt_flags(tsv_file):
     """
     Reads in the primer adapters file and prepares them into adapter strings for cutadapt
@@ -31,8 +32,8 @@ def get_cutadapt_flags(tsv_file):
                 r2_flags.append(f"-A {fields[2]}")
     return ' '.join(r1_flags), ' '.join(r2_flags)
 
-fq1_dict, fq2_dict = build_fastq_dicts(samples)
 
+fq1_dict, fq2_dict = build_fastq_dicts(samples)
 r1_flags_str, r2_flags_str = get_cutadapt_flags(config["primers"])
 
 
@@ -51,8 +52,10 @@ rule fastp_trim_and_filter:
     
     conda:
         "ruleenvs/fastp.yml"
+    
     log:
         "results/logs/fastp_logs/{sample_name}_fastp.log"
+    
     shell:
         """
         fastp --thread {threads} -i {input.fq1} \
@@ -65,6 +68,7 @@ rule fastp_trim_and_filter:
         --html {output.html} \
         --trim_poly_g > {log} 2>&1
         """
+
 
 rule cutadapt_remove_primers:
     input: 
@@ -119,8 +123,10 @@ rule bwa_align_and_sort:
     
     log:
         "results/logs/bwa/{sample}_{exon}_bwa.log"
+    
     conda:
         "ruleenvs/bwa.yml"
+    
     shell:
         """
         bwa mem -t {threads} -R "{params.rg}" "{input.ref}" "{input.fq1_trim_ca}" "{input.fq2_trim_ca}" |

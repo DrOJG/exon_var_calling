@@ -18,6 +18,7 @@ rule gatk_baserecalibrator:
     wrapper:
         "v5.8.3/bio/gatk/baserecalibrator"
 
+
 rule gatk_applybqsr:
     input:
         bam="results/aligned_bams/{sample_name}_sorted.bam",
@@ -36,6 +37,7 @@ rule gatk_applybqsr:
         mem_mb=1024,
     wrapper:
         "v5.8.3/bio/gatk/applybqsr"
+
 
 rule samtools_index_final_bam:
     input:
