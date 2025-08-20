@@ -12,7 +12,7 @@
 #$ -pe smp 12
 
 ### Set Working Directory - CHANGE THIS EACH TIME! ###
-#$ -wd /home/sejjojg/Scratch/workspace/exon_var_calling/
+#$ -wd ${HOME}/Scratch/workspace/exon_var_calling/
 
 # Load modules
 
