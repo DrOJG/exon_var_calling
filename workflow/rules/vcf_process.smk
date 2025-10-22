@@ -279,7 +279,7 @@ rule snpeff_download:
         mem_mb=1024
     
     wrapper:
-        "v7.2.0/bio/snpeff/download"
+        "v7.0.0/bio/snpeff/download"
 
 
 rule snpeff:
