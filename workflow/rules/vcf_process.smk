@@ -175,7 +175,7 @@ rule bcftools_concat_haplotypecaller:
         mem_mb=1024,
     
     wrapper:
-        "v6.1.0/bio/bcftools/concat"
+        "v7.6.0/bio/bcftools/concat"
 
 
 rule bcftools_concat_freebayes:
@@ -204,7 +204,7 @@ rule bcftools_concat_freebayes:
         mem_mb=1024,
     
     wrapper:
-        "v6.1.0/bio/bcftools/concat"
+        "v7.6.0/bio/bcftools/concat"
 
 
 rule bcftools_concat_lofreq:
@@ -233,7 +233,7 @@ rule bcftools_concat_lofreq:
         mem_mb=1024,
     
     wrapper:
-        "v6.1.0/bio/bcftools/concat"
+        "v7.6.0/bio/bcftools/concat"
 
 
 rule bcftools_concat_mutect:
@@ -262,7 +262,7 @@ rule bcftools_concat_mutect:
         mem_mb=1024,
     
     wrapper:
-        "v6.1.0/bio/bcftools/concat"
+        "v7.6.0/bio/bcftools/concat"
 
 
 rule snpeff_download:
